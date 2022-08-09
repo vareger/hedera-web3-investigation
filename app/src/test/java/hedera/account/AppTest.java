@@ -211,15 +211,31 @@ class AppTest {
 
     @Test
     void getBalance() throws IOException {
-        var result = web3j.ethGetBalance(ACCOUNT.toString(), DefaultBlockParameterName.LATEST).send();
+        {
+            // Using hedera account id
+            var result = web3j.ethGetBalance(ACCOUNT.toString(), DefaultBlockParameterName.LATEST).send();
 
-        if (result.hasError()) {
-            System.out.println(result.getError().getMessage());
-            System.out.println(result.getError().getData());
-            fail();
+            if (result.hasError()) {
+                System.out.println(result.getError().getMessage());
+                System.out.println(result.getError().getData());
+                fail();
+            }
+
+            System.out.println(result.getBalance());
         }
 
-        System.out.println(result.getBalance());
+        {
+            // Using encoded account id to ethereum address
+            var result = web3j.ethGetBalance(ACCOUNT.toSolidityAddress(), DefaultBlockParameterName.LATEST).send();
+
+            if (result.hasError()) {
+                System.out.println(result.getError().getMessage());
+                System.out.println(result.getError().getData());
+                fail();
+            }
+
+            System.out.println(result.getBalance());
+        }
     }
 
     @Test
